@@ -175,7 +175,6 @@ MarbleMapPrivate::MarbleMapPrivate( MarbleMap *parent, MarbleModel *model ) :
     m_isLockedToSubSolarPoint( false ),
     m_isSubSolarPointIconVisible( false )
 {
-    m_layerManager.addLayer( &m_floatItemsLayer );
     m_layerManager.addLayer( &m_fogLayer );
     m_layerManager.addLayer( &m_groundLayer );
     m_layerManager.addLayer( &m_geometryLayer );
@@ -337,7 +336,6 @@ MarbleMap::~MarbleMap()
 
     d->m_layerManager.removeLayer( &d->m_customPaintLayer );
     d->m_layerManager.removeLayer( &d->m_geometryLayer );
-    d->m_layerManager.removeLayer( &d->m_floatItemsLayer );
     d->m_layerManager.removeLayer( &d->m_fogLayer );
     d->m_layerManager.removeLayer( &d->m_placemarkLayer );
     d->m_layerManager.removeLayer( &d->m_textureLayer );
@@ -819,6 +817,7 @@ void MarbleMap::paint( GeoPainter &painter, const QRect &dirtyRect )
 
     RenderStatus const oldRenderStatus = d->m_renderState.status();
     d->m_layerManager.renderLayers( &painter, &d->m_viewport );
+    d->m_floatItemsLayer.paint( &painter, d->m_viewport );
     d->m_renderState = d->m_layerManager.renderState();
     bool const parsing = d->m_model->fileManager()->pendingFiles() > 0;
     d->m_renderState.addChild( RenderState( "Files", parsing ? WaitingForData : Complete ) );

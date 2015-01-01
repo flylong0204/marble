@@ -12,28 +12,27 @@
 #define MARBLE_FLOATITEMSLAYER_H
 
 #include <QObject>
-#include "LayerInterface.h"
 
 #include <QList>
 #include <QRegion>
+
+class QPainter;
 
 namespace Marble
 {
 
 class AbstractFloatItem;
 class RenderPlugin;
+class ViewportParams;
 
-class FloatItemsLayer : public QObject, public LayerInterface
+class FloatItemsLayer : public QObject
 {
     Q_OBJECT
 
  public:
     explicit FloatItemsLayer( QObject *parent = 0 );
 
-    QStringList renderPosition() const;
-
-    bool render( GeoPainter *painter, ViewportParams *viewport,
-       const QString &renderPos = "NONE", GeoSceneLayer *layer = 0 );
+    void paint( QPainter *painter, const ViewportParams &viewport );
 
     void addFloatItem( AbstractFloatItem *floatItem );
 

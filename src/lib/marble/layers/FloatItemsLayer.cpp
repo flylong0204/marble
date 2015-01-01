@@ -11,8 +11,9 @@
 #include "FloatItemsLayer.h"
 
 #include "AbstractFloatItem.h"
-#include "GeoPainter.h"
 #include "ViewportParams.h"
+
+#include <QPainter>
 
 namespace Marble
 {
@@ -23,19 +24,8 @@ FloatItemsLayer::FloatItemsLayer( QObject *parent ) :
 {
 }
 
-QStringList FloatItemsLayer::renderPosition() const
+void FloatItemsLayer::paint( QPainter *painter, const ViewportParams &viewport )
 {
-    return QStringList() << "FLOAT_ITEM";
-}
-
-bool FloatItemsLayer::render( GeoPainter *painter,
-                              ViewportParams *viewport,
-                              const QString &renderPos,
-                              GeoSceneLayer *layer )
-{
-    Q_UNUSED( renderPos )
-    Q_UNUSED( layer )
-
     foreach ( AbstractFloatItem *item, m_floatItems ) {
         if ( !item->enabled() )
             continue;
@@ -46,11 +36,9 @@ bool FloatItemsLayer::render( GeoPainter *painter,
         }
 
         if ( item->visible() ) {
-            item->paintEvent( painter, viewport );
+            item->paintEvent( painter, &viewport );
         }
     }
-
-    return true;
 }
 
 void FloatItemsLayer::addFloatItem( AbstractFloatItem *floatItem )
